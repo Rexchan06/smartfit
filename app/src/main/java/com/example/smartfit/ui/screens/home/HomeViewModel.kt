@@ -258,13 +258,22 @@ class HomeViewModel(
      */
     private fun loadWorkoutSuggestions() {
         viewModelScope.launch {
+            Logger.d("HomeViewModel", "Starting to load workout suggestions...")
             try {
                 val workouts = workoutRepository.getExercises(limit = 5)
                 _workoutSuggestions.value = workouts
-                Logger.i("HomeViewModel", "Loaded ${workouts.size} workout suggestions")
+                Logger.i("HomeViewModel", "✅ Successfully loaded ${workouts.size} workout suggestions")
+                workouts.forEach { workout ->
+                    Logger.d("HomeViewModel", "  - ${workout.name} (${workout.category})")
+                }
             } catch (e: Exception) {
-                Logger.e("HomeViewModel", "Failed to load workout suggestions (non-critical)", e)
-                // Don't show error to user - workout suggestions are optional
+                Logger.e("HomeViewModel", "❌ Failed to load workout suggestions: ${e.message}", e)
+                Logger.e("HomeViewModel", "Exception type: ${e.javaClass.simpleName}")
+                e.printStackTrace()
+
+                // TEMPORARY: Show sample workouts if API fails (for testing UI)
+                Logger.w("HomeViewModel", "Loading sample workout data for testing...")
+                _workoutSuggestions.value = getSampleWorkouts()
             }
         }
     }
@@ -278,6 +287,62 @@ class HomeViewModel(
     override fun onCleared() {
         super.onCleared()
         Logger.d("HomeViewModel", "Cleared - cleaning up resources")
+    }
+
+    /**
+     * GET SAMPLE WORKOUTS - Fallback test data
+     *
+     * TEMPORARY function for testing UI when API is unavailable
+     * Remove this once API is working properly
+     */
+    private fun getSampleWorkouts(): List<Workout> {
+        return listOf(
+            Workout(
+                id = 1,
+                name = "Push-ups",
+                description = "Start in plank position, lower body until chest nearly touches floor, push back up. Great for building upper body strength.",
+                category = "Chest",
+                muscles = listOf("Pectorals", "Triceps", "Shoulders"),
+                equipment = "Bodyweight",
+                difficulty = com.example.smartfit.domain.model.DifficultyLevel.BEGINNER
+            ),
+            Workout(
+                id = 2,
+                name = "Squats",
+                description = "Stand with feet shoulder-width apart, lower hips back and down, push through heels to return. Essential for leg development.",
+                category = "Legs",
+                muscles = listOf("Quadriceps", "Glutes", "Hamstrings"),
+                equipment = "Bodyweight",
+                difficulty = com.example.smartfit.domain.model.DifficultyLevel.BEGINNER
+            ),
+            Workout(
+                id = 3,
+                name = "Plank",
+                description = "Hold a push-up position with forearms on ground. Keep body straight from head to heels. Core stability exercise.",
+                category = "Core",
+                muscles = listOf("Abs", "Lower Back"),
+                equipment = "Bodyweight",
+                difficulty = com.example.smartfit.domain.model.DifficultyLevel.BEGINNER
+            ),
+            Workout(
+                id = 4,
+                name = "Lunges",
+                description = "Step forward with one leg, lower hips until both knees are bent at 90 degrees, push back to start. Alternating legs.",
+                category = "Legs",
+                muscles = listOf("Quadriceps", "Glutes"),
+                equipment = "Bodyweight",
+                difficulty = com.example.smartfit.domain.model.DifficultyLevel.INTERMEDIATE
+            ),
+            Workout(
+                id = 5,
+                name = "Burpees",
+                description = "From standing, drop to plank, do a push-up, jump feet to hands, jump up with arms overhead. Full body cardio.",
+                category = "Cardio",
+                muscles = listOf("Full Body"),
+                equipment = "Bodyweight",
+                difficulty = com.example.smartfit.domain.model.DifficultyLevel.ADVANCED
+            )
+        )
     }
 }
 
