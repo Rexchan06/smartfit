@@ -1,0 +1,11 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <!-- For Compose apps, this theme is only used briefly before Compose takes over -->
+    <!-- Material3 theming is handled in Compose code, not XML -->
+    <style name="Base.Theme.SmartFit" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.SmartFit" parent="Base.Theme.SmartFit" />
+</resources>

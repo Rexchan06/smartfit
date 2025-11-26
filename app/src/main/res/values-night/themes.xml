@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <!-- For Compose apps, this theme is only used briefly before Compose takes over -->
+    <!-- Material3 theming is handled in Compose code, not XML -->
+    <style name="Base.Theme.SmartFit" parent="android:Theme.Material.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    </style>
+</resources>
